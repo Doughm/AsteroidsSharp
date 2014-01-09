@@ -2,7 +2,7 @@ Asteroids
 =========
 
 An Asteroids clone.
-Made in C# with ver 1.2 of my SFML game engine.
+Made in C# with ver 1.2 of my SFML C# game engine.
 Features:
 High score table, 
 Customizable controls, 
@@ -13,4 +13,4 @@ Assets used in Asteroids are from:
 opengameart.org, 
 The Games Factory Pro
 
-Requires .net of 4.0 or greater.
+Requires install of .net of 4.0 or greater.
