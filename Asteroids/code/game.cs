@@ -185,7 +185,10 @@ namespace Asteroids
             smallAsteroidsCounter = 0;
             lives = 2;
             level = newLevel;
-            score = 0;
+            if (newLevel == 0)
+            {
+                score = 0;
+            }
             ship.position = new Vector2f(302, 228);
             ship.angle = 0;
             ship.vector.X = 0;
