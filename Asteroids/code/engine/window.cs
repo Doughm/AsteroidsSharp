@@ -1,54 +1,18 @@
-﻿//SFML 2D C# Game Engine 1.2
-//Programer Douglas Harvey-Marose
-//
-// - Version Changes 1.2
-//   replaced the thread sleep timer with a more accurate timing functionality
-//   moved all timing related methods into a class called Timer
-//   added the ability to uncap the frame rate with the INI entry FPSCapped
-//   added the ability to set the frame rate with the INI entry FPSCap
-//   added the ability to turn the sound off or on in the Audio class
-//   added a value to store the name of the program
-//   added a new methods to audio to control the volume
-//   added a new method to LoadINI to get the file name
-//   the batchIswithin method now returns more than one entity
-//   fixed many small bugs, and cleaned the code up
-//   added methods to find if an entity is in an area, or within the window
-//
-// - Version Changes 1.1 -
-//   added in a new class to load in an INI file, and save and load information to it
-//   added an class to play audio files
-//   added in animation entities, functionality for animating sprites
-//   added in a ticker class, which keeps trak of how many loops go by 
-//   added custom bounds detection options box and circle
-//   added in an input method to detect if a mouse or keyboard button is clicked/tapped
-//   added in an input methods to take in only one key or mouse click
-//   basic program parameters are now loaded into the system thourgh an INI, rather than hardcoded
-//   added rotate around center method
-//   changed the text entity to take a single font rather than setting it once per entity
-//   changed the deleteAll method so that it deletes everything
-//   added method deleteAllEntitys that only deletes entitys
-//   fixed minor errors, typos, and bugs in several classes/methods
-//
-// - Known isues -
-//   collison detection for entities is bounding box only, can be inaccurate
-//   there is a conflict when using sprites and drawing shapes, can mess up shapes
-//
+﻿//controls all aspects of the window including
+//keyboard and mouse input, and displaying graphics
 
 using System;
 using SFML.Window;
 using SFML.Graphics;
-using SFML.Audio;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.IO;
 
 namespace Asteroids
 {
     class Window
     {
-        private string programName = "GameEngine";
+        private string programName = "Asteroids";
         private uint resolutionX;
         private uint resolutionY;
         private LoadINI loadINI = new LoadINI("engine.ini");
@@ -154,57 +118,57 @@ namespace Asteroids
         {
             tempStr = string.Empty;
             if (Keyboard.IsKeyPressed(Keyboard.Key.A))
-                tempStr += "A";
+                tempStr += "LetrA";
             if (Keyboard.IsKeyPressed(Keyboard.Key.B))
-                tempStr += "B";
+                tempStr += "LetrB";
             if (Keyboard.IsKeyPressed(Keyboard.Key.C))
-                tempStr += "C";
+                tempStr += "LetrC";
             if (Keyboard.IsKeyPressed(Keyboard.Key.D))
-                tempStr += "D";
+                tempStr += "LetrD";
             if (Keyboard.IsKeyPressed(Keyboard.Key.E))
-                tempStr += "E";
+                tempStr += "LetrE";
             if (Keyboard.IsKeyPressed(Keyboard.Key.F))
-                tempStr += "F";
+                tempStr += "LetrF";
             if (Keyboard.IsKeyPressed(Keyboard.Key.G))
-                tempStr += "G";
+                tempStr += "LetrG";
             if (Keyboard.IsKeyPressed(Keyboard.Key.H))
-                tempStr += "H";
+                tempStr += "LetrH";
             if (Keyboard.IsKeyPressed(Keyboard.Key.I))
-                tempStr += "I";
+                tempStr += "LetrI";
             if (Keyboard.IsKeyPressed(Keyboard.Key.J))
-                tempStr += "J";
+                tempStr += "LetrJ";
             if (Keyboard.IsKeyPressed(Keyboard.Key.K))
-                tempStr += "K";
+                tempStr += "LetrK";
             if (Keyboard.IsKeyPressed(Keyboard.Key.L))
-                tempStr += "L";
+                tempStr += "LetrL";
             if (Keyboard.IsKeyPressed(Keyboard.Key.M))
-                tempStr += "M";
+                tempStr += "LetrM";
             if (Keyboard.IsKeyPressed(Keyboard.Key.N))
-                tempStr += "N";
+                tempStr += "LetrN";
             if (Keyboard.IsKeyPressed(Keyboard.Key.O))
-                tempStr += "O";
+                tempStr += "LetrO";
             if (Keyboard.IsKeyPressed(Keyboard.Key.P))
-                tempStr += "P";
+                tempStr += "LetrP";
             if (Keyboard.IsKeyPressed(Keyboard.Key.Q))
-                tempStr += "Q";
+                tempStr += "LetrQ";
             if (Keyboard.IsKeyPressed(Keyboard.Key.R))
-                tempStr += "R";
+                tempStr += "LetrR";
             if (Keyboard.IsKeyPressed(Keyboard.Key.S))
-                tempStr += "S";
+                tempStr += "LetrS";
             if (Keyboard.IsKeyPressed(Keyboard.Key.T))
-                tempStr += "T";
+                tempStr += "LetrT";
             if (Keyboard.IsKeyPressed(Keyboard.Key.U))
-                tempStr += "U";
+                tempStr += "LetrU";
             if (Keyboard.IsKeyPressed(Keyboard.Key.V))
-                tempStr += "V";
+                tempStr += "LetrV";
             if (Keyboard.IsKeyPressed(Keyboard.Key.W))
-                tempStr += "W";
+                tempStr += "LetrW";
             if (Keyboard.IsKeyPressed(Keyboard.Key.X))
-                tempStr += "X";
+                tempStr += "LetrX";
             if (Keyboard.IsKeyPressed(Keyboard.Key.Y))
-                tempStr += "Y";
+                tempStr += "LetrY";
             if (Keyboard.IsKeyPressed(Keyboard.Key.Z))
-                tempStr += "Z";
+                tempStr += "LetrZ";
             if (Keyboard.IsKeyPressed(Keyboard.Key.Num0))
                 tempStr += "Num0";
             if (Keyboard.IsKeyPressed(Keyboard.Key.Num1))
@@ -246,7 +210,7 @@ namespace Asteroids
             if (Keyboard.IsKeyPressed(Keyboard.Key.LBracket))
                 tempStr += "Lbracket";
             if (Keyboard.IsKeyPressed(Keyboard.Key.RBracket))
-                tempStr += "Rbracket  ";
+                tempStr += "Rbracket";
             if (Keyboard.IsKeyPressed(Keyboard.Key.SemiColon))
                 tempStr += "SemiColon";
             if (Keyboard.IsKeyPressed(Keyboard.Key.Comma))
@@ -360,57 +324,57 @@ namespace Asteroids
         public string inputKeyboardSingle()
         {
             if (Keyboard.IsKeyPressed(Keyboard.Key.A))
-                return "A";
+                return "LetrA";
             if (Keyboard.IsKeyPressed(Keyboard.Key.B))
-                return "B";
+                return "LetrB";
             if (Keyboard.IsKeyPressed(Keyboard.Key.C))
-                return "C";
+                return "LetrC";
             if (Keyboard.IsKeyPressed(Keyboard.Key.D))
-                return "D";
+                return "LetrD";
             if (Keyboard.IsKeyPressed(Keyboard.Key.E))
-                return "E";
+                return "LetrE";
             if (Keyboard.IsKeyPressed(Keyboard.Key.F))
-                return "F";
+                return "LetrF";
             if (Keyboard.IsKeyPressed(Keyboard.Key.G))
-                return "G";
+                return "LetrG";
             if (Keyboard.IsKeyPressed(Keyboard.Key.H))
-                return "H";
+                return "LetrH";
             if (Keyboard.IsKeyPressed(Keyboard.Key.I))
-                return "I";
+                return "LetrI";
             if (Keyboard.IsKeyPressed(Keyboard.Key.J))
-                return "J";
+                return "LetrJ";
             if (Keyboard.IsKeyPressed(Keyboard.Key.K))
-                return "K";
+                return "LetrK";
             if (Keyboard.IsKeyPressed(Keyboard.Key.L))
-                return "L";
+                return "LetrL";
             if (Keyboard.IsKeyPressed(Keyboard.Key.M))
-                return "M";
+                return "LetrM";
             if (Keyboard.IsKeyPressed(Keyboard.Key.N))
-                return "N";
+                return "LetrN";
             if (Keyboard.IsKeyPressed(Keyboard.Key.O))
-                return "O";
+                return "LetrO";
             if (Keyboard.IsKeyPressed(Keyboard.Key.P))
-                return "P";
+                return "LetrP";
             if (Keyboard.IsKeyPressed(Keyboard.Key.Q))
-                return "Q";
+                return "LetrQ";
             if (Keyboard.IsKeyPressed(Keyboard.Key.R))
-                return "R";
+                return "LetrR";
             if (Keyboard.IsKeyPressed(Keyboard.Key.S))
-                return "S";
+                return "LetrS";
             if (Keyboard.IsKeyPressed(Keyboard.Key.T))
-                return "T";
+                return "LetrT";
             if (Keyboard.IsKeyPressed(Keyboard.Key.U))
-                return "U";
+                return "LetrU";
             if (Keyboard.IsKeyPressed(Keyboard.Key.V))
-                return "V";
+                return "LetrV";
             if (Keyboard.IsKeyPressed(Keyboard.Key.W))
-                return "W";
+                return "LetrW";
             if (Keyboard.IsKeyPressed(Keyboard.Key.X))
-                return "X";
+                return "LetrX";
             if (Keyboard.IsKeyPressed(Keyboard.Key.Y))
-                return "Y";
+                return "LetrY";
             if (Keyboard.IsKeyPressed(Keyboard.Key.Z))
-                return "Z";
+                return "LetrZ";
             if (Keyboard.IsKeyPressed(Keyboard.Key.Num0))
                 return "Num0";
             if (Keyboard.IsKeyPressed(Keyboard.Key.Num1))
@@ -2838,350 +2802,6 @@ namespace Asteroids
             speed = animationSpeed;
             frames = animationFrames;
             positions = animationPositions;
-        }
-    }
-
-    //includes all functionality needed to save and load from an ini file
-    class LoadINI
-    {
-        string tempStr;
-        string fileName;
-        string[] fileContent;
-
-        public LoadINI(string file)
-        {
-            if (fileExists(file))
-            {
-                fileName = file;
-                fileContent = System.IO.File.ReadAllLines(fileName);
-            }
-        }
-
-        //returns the whole file
-        public string getFile()
-        {
-            tempStr = string.Empty;
-            for (int i = 0; i < fileContent.Length; i++)
-            {
-                tempStr += fileContent[i] + "\n";
-            }
-            return tempStr;
-        }
-
-        //returns if the given file exists
-        public string getFileName()
-        {
-            return fileName;
-        }
-
-        //tests if a given file exists
-        public bool fileExists(string file)
-        {
-            return File.Exists(file);
-        }
-
-        //sets a new file to access
-        public void setFile(string file)
-        {
-            if (File.Exists(file))
-            {
-                fileName = file;
-                fileContent = System.IO.File.ReadAllLines(fileName);
-            }
-        }
-
-        //tests if given key is in the file
-        public bool inFile(string key)
-        {
-            for (int i = 0; i < fileContent.Length; i++)
-            {
-                if (fileContent[i].Contains(key + " ="))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        //returns value of given key from file
-        public string getValue(string key)
-        {
-            for (int i = 0; i < fileContent.Length; i++)
-            {
-                if (fileContent[i].Contains(key + " ="))
-                {
-                    return fileContent[i].Replace(key, " ").Replace('=', ' ').Trim();
-                }
-            }
-            return "error";
-        }
-
-        //updates a key in the file to a given value
-        public void updateFile(string key, string newValue)
-        {
-            for (int i = 0; i < fileContent.Length; i++)
-            {
-                if (fileContent[i].Contains(key + " ="))
-                {
-                    fileContent[i] = key + " = " + newValue;
-                    File.WriteAllLines(fileName, fileContent);
-                    break;
-                }
-            }
-        }
-    }
-
-    //plays and manages audio files
-    class Audio
-    {
-        Dictionary<string, Sound> soundDictionary = new Dictionary<string, Sound>();
-        Dictionary<string, Music> musicDictionary = new Dictionary<string, Music>();
-        bool soundOn = true;
-
-        //turns sound on or off
-        public void soundToggle()
-        {
-            if (soundOn == true)
-            {
-                soundOn = false;
-            }
-            else
-            {
-                soundOn = true;
-            }
-        }
-
-        //adds a new sound into memory
-        public void addSample(string name, string file)
-        {
-            if (soundOn)
-            {
-                soundDictionary.Add(name, new Sound());
-                soundDictionary[name].SoundBuffer = new SoundBuffer(file);
-            }
-        }
-
-        //plays a sample
-        public void samplePlay(string name)
-        {
-            if (soundOn && soundDictionary.ContainsKey(name))
-            {
-                soundDictionary[name].Play();
-            }
-        }
-
-        //pauses a sample
-        public void samplePause(string name)
-        {
-            if (soundOn && soundDictionary.ContainsKey(name))
-            {
-                soundDictionary[name].Pause();
-            }
-        }
-
-        //sets if a sample loops
-        public void sampleLoop(string name, bool loop)
-        {
-            if (soundOn && soundDictionary.ContainsKey(name))
-            {
-                soundDictionary[name].Loop = loop;
-            }
-        }
-
-        //stops a sample playing
-        public void sampleStop(string name)
-        {
-            if (soundOn && soundDictionary.ContainsKey(name))
-            {
-                soundDictionary[name].Stop();
-
-            }
-        }
-
-        //sets the volume of the sample [0 -100]
-        public void sampleVolume(string name, int volume)
-        {
-            if (soundOn && soundDictionary.ContainsKey(name))
-            {
-                soundDictionary[name].Volume = volume;
-
-            }
-        }
-
-        //adds a file to play from the hard drive
-        public void addMusic(string name, string file)
-        {
-            if (soundOn)
-            {
-                musicDictionary.Add(name, new Music(file));
-            }
-        }
-
-        //plays a music file
-        public void musicPlay(string name)
-        {
-            if (soundOn && soundDictionary.ContainsKey(name))
-            {
-                musicDictionary[name].Play();
-            }
-        }
-
-        //pauses a music file
-        public void musicPause(string name)
-        {
-            if (soundOn && soundDictionary.ContainsKey(name))
-            {
-                musicDictionary[name].Pause();
-            }
-        }
-
-        //sets if a music file loops
-        public void musicLoop(string name, bool loop)
-        {
-            if (soundOn && soundDictionary.ContainsKey(name))
-            {
-                musicDictionary[name].Loop = loop;
-            }
-        }
-
-        //stops a music file from playing
-        public void musicStop(string name)
-        {
-            if (soundOn && soundDictionary.ContainsKey(name))
-            {
-                musicDictionary[name].Stop();
-            }
-        }
-
-        //sets the volume of the music [0 -100]
-        public void musicVolume(string name, int volume)
-        {
-            if (soundOn && soundDictionary.ContainsKey(name))
-            {
-                musicDictionary[name].Volume = volume;
-            }
-        }
-
-        //clears all samples from this object
-        public void clearSamples()
-        {
-            if (soundOn)
-            {
-                soundDictionary.Clear();
-            }
-        }
-
-        //clears all music from this object
-        public void clearMusic()
-        {
-            if (soundOn)
-            {
-                musicDictionary.Clear();
-            }
-        }
-
-        //clears all sounds from this object
-        public void clearAll()
-        {
-            if (soundOn)
-            {
-                soundDictionary.Clear();
-                musicDictionary.Clear();
-            }
-        }
-    }
-
-    //keeps trak of how many loops have gone by, and when a specific amount has passed
-    class Ticker
-    {
-        private int counter = 0;
-
-        //adds one too the total amount
-        public void increment()
-        {
-            counter++;
-        }
-
-        //returns the current amount in the counter
-        public int currentAmount()
-        {
-            return counter;
-        }
-
-        //returns if a value is at or greater than the counter
-        public bool atAmount(int amount)
-        {
-            if (amount <= counter)
-            {
-                return true;
-            }
-            return false;
-        }
-
-        //resets the counter
-        public void resetCounter()
-        {
-            counter = 0;
-        }
-    }
-
-    //Keeps track of game time
-    class GameTimer
-    {
-        private bool watchSwitch = true;
-        private Stopwatch stopWatch = new Stopwatch();
-        private double time = 0;
-
-        //starts and stops the stopwatch
-        public void toggleStopwatch()
-        {
-            if (watchSwitch == true)
-            {
-                stopWatch.Stop();
-                watchSwitch = false;
-            }
-            else if (watchSwitch == false)
-            {
-                stopWatch.Restart();
-                stopWatch.Start();
-                watchSwitch = true;
-            }
-        }
-
-        //restarts the stop watch
-        public void restartWatch()
-        {
-            stopWatch.Stop();
-            stopWatch.Restart();
-            stopWatch.Start();
-        }
-
-        //returns the time value
-        public double getTimeMilliseconds()
-        {
-            time = stopWatch.Elapsed.TotalMilliseconds;
-            return time;
-        }
-
-        //returns the time value
-        public double getTimeSecounds()
-        {
-            time = stopWatch.Elapsed.TotalSeconds;
-            return time;
-        }
-
-        //returns the time value
-        public double getTimeMinutes()
-        {
-            time = stopWatch.Elapsed.TotalMinutes;
-            return time;
-        }
-
-        //returns the amount of time the last cycle was off by
-        public double getDeltaTime(int speed)
-        {
-            time = stopWatch.Elapsed.TotalMilliseconds;
-            return speed / time;
         }
     }
 }

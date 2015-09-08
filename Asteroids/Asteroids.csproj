@@ -46,17 +46,20 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="sfmlnet-audio-2">
-      <HintPath>SFML\lib\sfmlnet-audio-2.dll</HintPath>
+      <HintPath>..\..\..\libraries\SFML\Dot Net\SFML.Net-2.1-32bits\SFML.Net-2.1\lib\sfmlnet-audio-2.dll</HintPath>
     </Reference>
     <Reference Include="sfmlnet-graphics-2">
-      <HintPath>SFML\lib\sfmlnet-graphics-2.dll</HintPath>
+      <HintPath>..\..\..\libraries\SFML\Dot Net\SFML.Net-2.1-32bits\SFML.Net-2.1\lib\sfmlnet-graphics-2.dll</HintPath>
     </Reference>
     <Reference Include="sfmlnet-window-2">
-      <HintPath>SFML\lib\sfmlnet-window-2.dll</HintPath>
+      <HintPath>..\..\..\libraries\SFML\Dot Net\SFML.Net-2.1-32bits\SFML.Net-2.1\lib\sfmlnet-window-2.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="sound\BOOM2.WAV">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="csfml-audio-2.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -72,9 +75,6 @@
     <Content Include="openal32.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="sound\BOOM2.WAV">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="sound\POP1.WAV">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -83,7 +83,13 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="code\engine.cs" />
+    <Compile Include="code\assetloader.cs" />
+    <Compile Include="code\engine\audio.cs" />
+    <Compile Include="code\engine\loadini.cs" />
+    <Compile Include="code\engine\textedit.cs" />
+    <Compile Include="code\engine\timer.cs" />
+    <Compile Include="code\engine\window.cs" />
+    <Compile Include="code\entity.cs" />
     <Compile Include="code\game.cs" />
     <Compile Include="code\main.cs" />
   </ItemGroup>

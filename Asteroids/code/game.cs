@@ -5,7 +5,13 @@ namespace Asteroids
 {
     class Game
     {
+        Window window;
+        Audio audio;
+        AssetLoader assetLoader;
+        Ticker ticker = new Ticker();
+        TextEdit textEdit = new TextEdit();
         LoadINI loadINI = new LoadINI("engine.ini");
+
         private Random random = new Random();
         private Entity ship = new Entity(new Vector2f(320, 240));
         private Ticker respawnCounter = new Ticker();
@@ -15,7 +21,7 @@ namespace Asteroids
         private Entity[] smallAsteroids = new Entity[48];
         private int smallAsteroidsCounter = 0;
         private Entity[] bullets = new Entity[4];
-        private int[] bulletsCounter = new int[4]{0,0,0,0};
+        private int[] bulletsCounter = new int[4] { 0, 0, 0, 0 };
         private const int bulletTime = 40;
         private Vector2f[] explosions = new Vector2f[4];
         private int explosionCounter = 0;
@@ -25,7 +31,6 @@ namespace Asteroids
         private int lives = 2;
         private int bulletCounter = 0;
         private int asteroidsLeft = 4;
-        private Vector2f tempVector;
         private bool isPaused;
         private string fireKey;
         private string pauseKey;
@@ -33,13 +38,27 @@ namespace Asteroids
         private string rightKey;
         private string hyperspaceKey;
         private string accelerateKey;
-        private bool soundOn;
         private string[] highScoreNames = new string[4];
         private int[] highScores = new int[4];
-        private float gameSpeed;
+        private bool isMenu = true;
+        private string mouseClick;
+        private string keyboard;
+        private string keyboardDown;
+        private string keyboardSingle;
+        private string tempStr = string.Empty;
+        private string setKey = string.Empty;
+        private bool keyPress = false;
+        private bool typing = false;
+        private Vector2f tempVector = new Vector2f();
 
-        public Game()
+        public float gameSpeed { get; private set; }
+
+        public Game(Window passedWindow, Audio passedAudio, AssetLoader passedAsset)
         {
+            window = passedWindow;
+            audio = passedAudio;
+            assetLoader = passedAsset;
+
             updateFromFile();
             isPaused = false;
             ship.isVisible = true;
@@ -60,7 +79,7 @@ namespace Asteroids
                 }
                 if (i < 4)
                 {
-                    explosions[i] = new Vector2f(-500,-500);
+                    explosions[i] = new Vector2f(-500, -500);
                     largeAsteroids[i].isVisible = true;
                     bullets[i] = new Entity(new Vector2f(-500, -500));
                     bullets[i].speed = 10;
@@ -70,7 +89,7 @@ namespace Asteroids
         }
 
         //updates the settings from the INI
-        public void updateFromFile()
+        private void updateFromFile()
         {
             gameSpeed = Convert.ToInt32(loadINI.getValue("GameSpeed"));
             fireKey = loadINI.getValue("FireButton");
@@ -79,7 +98,7 @@ namespace Asteroids
             rightKey = loadINI.getValue("RightButton");
             accelerateKey = loadINI.getValue("Accelerate");
             hyperspaceKey = loadINI.getValue("HyperSpace");
-            soundOn = Convert.ToBoolean(loadINI.getValue("Sound"));
+            audio.setSoundOn(Convert.ToBoolean(loadINI.getValue("Sound")));
             highScoreNames[0] = loadINI.getValue("HighScoreName1");
             highScoreNames[1] = loadINI.getValue("HighScoreName2");
             highScoreNames[2] = loadINI.getValue("HighScoreName3");
@@ -92,16 +111,15 @@ namespace Asteroids
         }
 
         //updates the INI from the current settings
-        public void updateToFile()
+        private void updateToFile()
         {
-            loadINI.updateFile("GameSpeed", gameSpeed.ToString());
             loadINI.updateFile("FireButton", fireKey);
             loadINI.updateFile("Pause", pauseKey);
             loadINI.updateFile("LeftButton", leftKey);
             loadINI.updateFile("RightButton", rightKey);
             loadINI.updateFile("Accelerate", accelerateKey);
             loadINI.updateFile("HyperSpace", hyperspaceKey);
-            loadINI.updateFile("Sound", soundOn.ToString());
+            loadINI.updateFile("Sound", audio.getSoundOn().ToString());
             loadINI.updateFile("HighScoreName1", highScoreNames[0]);
             loadINI.updateFile("HighScoreName2", highScoreNames[1]);
             loadINI.updateFile("HighScoreName3", highScoreNames[2]);
@@ -113,7 +131,7 @@ namespace Asteroids
         }
 
         //updates the highscore table
-        public void updateHighScoreTable(string newName, int newScore)
+        private void updateHighScoreTable(string newName, int newScore)
         {
             if (newScore >= highScores[0])
             {
@@ -152,7 +170,7 @@ namespace Asteroids
         //randomly set up the asteroids
         private void randomiseAsteroids()
         {
-            for(int i = 0 ; i < level + 4; i++)
+            for (int i = 0; i < level + 4; i++)
             {
                 if (i == 12)
                 {
@@ -178,7 +196,7 @@ namespace Asteroids
         }
 
         //starts a new game at given level
-        public void reset(int newLevel)
+        private void reset(int newLevel)
         {
             asteroidsLeft = level + 4;
             mediumAsteroidsCounter = 0;
@@ -228,7 +246,7 @@ namespace Asteroids
             randomiseAsteroids();
         }
 
-        
+
         //calculates a vector from speed, angle, and position
         private Vector2f calculateVector(Vector2f position, float speed, int angle)
         {
@@ -241,7 +259,7 @@ namespace Asteroids
         }
 
         //updates the position of all entities
-        public void updatePositions()
+        private void updatePositions()
         {
             //ship
             if (ship.isVisible == true)
@@ -306,7 +324,7 @@ namespace Asteroids
         }
 
         //moves the ships position or direction
-        public void moveShip(string key)
+        private void moveShip(string key)
         {
             if (ship.isVisible == true)
             {
@@ -344,7 +362,7 @@ namespace Asteroids
         }
 
         //randomly creates a UFO
-        public void makeUFO()
+        private void makeUFO()
         {
             if (random.Next(1000) < 2 && ufo.isVisible == false)
             {
@@ -355,9 +373,9 @@ namespace Asteroids
         }
 
         //fires a bullet
-        public void fireBullet(string key)
+        private void fireBullet(string key)
         {
-            if (key.Contains(fireKey))
+            if (key.Contains(fireKey) && ship.isVisible == true)
             {
                 if (bulletCounter < 3)
                 {
@@ -367,6 +385,7 @@ namespace Asteroids
                 {
                     bulletCounter = 0;
                 }
+                audio.samplePlay("shotSnd");
                 bullets[bulletCounter].isVisible = true;
                 bullets[bulletCounter].position.X = ship.position.X + 10;
                 bullets[bulletCounter].position.Y = ship.position.Y + 10;
@@ -376,7 +395,7 @@ namespace Asteroids
         }
 
         //jumps the ship to a random spot
-        public void hyperspaceJump(string key)
+        private void hyperspaceJump(string key)
         {
             if (key.Contains(hyperspaceKey))
             {
@@ -386,7 +405,7 @@ namespace Asteroids
         }
 
         //respawns the ship after you die
-        public void shipRespawn()
+        private void shipRespawn()
         {
             respawnCounter.increment();
             if (respawnCounter.atAmount(30))
@@ -403,7 +422,7 @@ namespace Asteroids
         }
 
         //creates and explosion at given point
-        public void createExplosion(Vector2f position)
+        private void createExplosion(Vector2f position)
         {
             if (explosionCounter > 3)
             {
@@ -414,7 +433,7 @@ namespace Asteroids
         }
 
         //destroys a bullet
-        public void destroyBullet(int index)
+        private void destroyBullet(int index)
         {
             bullets[index].position.X = -500;
             bullets[index].position.Y = -500;
@@ -423,7 +442,7 @@ namespace Asteroids
         }
 
         //destroys a large asteroid
-        public void destroyLargeAsteroid(int index)
+        private void destroyLargeAsteroid(int index)
         {
             if (largeAsteroids[index].isVisible == true)
             {
@@ -452,7 +471,7 @@ namespace Asteroids
         }
 
         //destroys a medium asteroid
-        public void destroyMediumAsteroid(int index)
+        private void destroyMediumAsteroid(int index)
         {
             if (mediumAsteroids[index].isVisible == true)
             {
@@ -481,7 +500,7 @@ namespace Asteroids
         }
 
         //destroys a small asteroid
-        public void destroySmallAsteroid(int index)
+        private void destroySmallAsteroid(int index)
         {
             if (smallAsteroids[index].isVisible == true)
             {
@@ -494,7 +513,7 @@ namespace Asteroids
         }
 
         //destroys the ship
-        public void destroyShip()
+        private void destroyShip()
         {
             ship.position.X = -500;
             ship.position.Y = -500;
@@ -502,25 +521,25 @@ namespace Asteroids
         }
 
         //destroys the UFO
-        public void destroyUFO()
+        private void destroyUFO()
         {
             ufo.position.X = -500;
             ufo.position.Y = -500;
             score += 100;
         }
 
-        //destroys an exposition
-        public void destroyExposition(int index)
+        //destroys an explosion
+        private void destroyExplosion(int index)
         {
             explosions[index].X = -500;
             explosions[index].Y = -500;
         }
 
         //wraps an entity around the screen if it is out of bounds
-        public void wrapEntitys()
+        private void wrapEntitys()
         {
             //ship
-            if(ship.position.X >= 640)
+            if (ship.position.X >= 640)
             {
                 ship.position.X = -30;
             }
@@ -619,7 +638,7 @@ namespace Asteroids
         }
 
         //tests if the level has ended
-        public bool levelEnded()
+        private bool levelEnded()
         {
             if (asteroidsLeft == 0)
             {
@@ -629,273 +648,569 @@ namespace Asteroids
         }
 
         //changes to the next level
-        public void nextLevel()
+        private void nextLevel()
         {
             level++;
             reset(level);
         }
 
-
-        //returns the position of the ship
-        public Vector2f getShipPosition()
+        //updates the input
+        public void inputUpdate()
         {
-            return ship.position;
+            mouseClick = window.inputMouseClick();
+            keyboard = window.inputKeyboard();
+            keyboardDown = window.inputKeyboardDown();
+            keyboardSingle = window.inputKeyboardSingle();
         }
 
-        //returns the angle of the ship
-        public float getShipAngle()
+        //updates the menus
+        public void menuUpdate()
         {
-            return ship.angle;
+            if (isMenu == true)
+            {
+                if (mouseClick == "Leftbutton")
+                {
+                    if (window.isWithin("PlayButtonSpr", window.mousePositionView()))
+                    {
+                        isMenu = false;
+                        updateFromFile();
+                        reset(0);
+                        assetLoader.loadAsset("Clear");
+                        assetLoader.loadAsset("Game");
+                    }
+                    else if (window.isWithin("HighScoreButtonSpr", window.mousePositionView()))
+                    {
+                        assetLoader.loadAsset("Clear");
+                        assetLoader.loadAsset("HighScore");
+                        window.setText("ScoreTxt1", highScoreNames[0]);
+                        window.setText("ScoreTxt2", highScoreNames[1]);
+                        window.setText("ScoreTxt3", highScoreNames[2]);
+                        window.setText("ScoreTxt4", highScoreNames[3]);
+                        window.setText("NameTxt1", highScores[0].ToString());
+                        window.setText("NameTxt2", highScores[1].ToString());
+                        window.setText("NameTxt3", highScores[2].ToString());
+                        window.setText("NameTxt4", highScores[3].ToString());
+                    }
+                    else if (window.isWithin("OptionsButtonSpr", window.mousePositionView()))
+                    {
+                        assetLoader.loadAsset("Clear");
+                        assetLoader.loadAsset("Options");
+                        updateFromFile();
+                        if (audio.getSoundOn() == true)
+                        {
+                            window.setText("SoundTxt", "Sound On");
+                        }
+                        else
+                        {
+                            window.setText("SoundTxt", "Sound Off");
+                        }
+                    }
+                    else if (window.isWithin("MenuButtonSpr", window.mousePositionView()) && keyPress == false)
+                    {
+                        assetLoader.loadAsset("Clear");
+                        assetLoader.loadAsset("MainMenu");
+                    }
+                    else if (window.isWithin("ApplyButtonSpr", window.mousePositionView()) && keyPress == false)
+                    {
+                        updateToFile();
+                    }
+                    else if (window.isWithin("SoundButtonSpr", window.mousePositionView()))
+                    {
+                        if (audio.getSoundOn() == true)
+                        {
+                            audio.setSoundOn(false);
+                            window.setText("SoundTxt", "Sound Off");
+                        }
+                        else
+                        {
+                            audio.setSoundOn(true);
+                            window.setText("SoundTxt", "Sound On");
+                        }
+                    }
+                    else if (window.isWithin("KeyboardButtonSpr", window.mousePositionView()))
+                    {
+                        assetLoader.loadAsset("Clear");
+                        assetLoader.loadAsset("KeyboardSetup");
+                        if (fireKey.Contains("Letr") == true)
+                        {
+                            window.setText("FireKeyTxt", fireKey[4].ToString());
+                        }
+                        else
+                        {
+                            window.setText("FireKeyTxt", fireKey);
+                        }
+                        if (pauseKey.Contains("Letr") == true)
+                        {
+                            window.setText("PauseKeyTxt", pauseKey[4].ToString());
+                        }
+                        else
+                        {
+                            window.setText("PauseKeyTxt", pauseKey);
+                        }
+                        if (hyperspaceKey.Contains("Letr") == true)
+                        {
+                            window.setText("HyperspaceKeyTxt", hyperspaceKey[4].ToString());
+                        }
+                        else
+                        {
+                            window.setText("HyperspaceKeyTxt", hyperspaceKey);
+                        }
+                        if (rightKey.Contains("Letr") == true)
+                        {
+                            window.setText("RightKeyTxt", rightKey[4].ToString());
+                        }
+                        else
+                        {
+                            window.setText("RightKeyTxt", rightKey);
+                        }
+                        if (leftKey.Contains("Letr") == true)
+                        {
+                            window.setText("LeftKeyTxt", leftKey[4].ToString());
+                        }
+                        else
+                        {
+                            window.setText("LeftKeyTxt", leftKey);
+                        }
+                        if (accelerateKey.Contains("Letr") == true)
+                        {
+                            window.setText("AccelerateKeyTxt", accelerateKey[4].ToString());
+                        }
+                        else
+                        {
+                            window.setText("AccelerateKeyTxt", accelerateKey);
+                        }
+                    }
+                    else if (window.isWithin("FireButtonSpr", window.mousePositionView()))
+                    {
+                        setKey = "Fire";
+                        keyPress = true;
+                    }
+                    else if (window.isWithin("PauseButtonSpr", window.mousePositionView()))
+                    {
+                        setKey = "Pause";
+                        keyPress = true;
+                    }
+                    else if (window.isWithin("HyperspaceButtonSpr", window.mousePositionView()))
+                    {
+                        setKey = "HyperSpace";
+                        keyPress = true;
+                    }
+                    else if (window.isWithin("RightButtonSpr", window.mousePositionView()))
+                    {
+                        setKey = "Right";
+                        keyPress = true;
+                    }
+                    else if (window.isWithin("LeftButtonSpr", window.mousePositionView()))
+                    {
+                        setKey = "Left";
+                        keyPress = true;
+                    }
+                    else if (window.isWithin("AccelerateButtonSpr", window.mousePositionView()))
+                    {
+                        setKey = "Accelerate";
+                        keyPress = true;
+                    }
+                    else if (window.isWithin("EnterButtonSpr", window.mousePositionView()))
+                    {
+                        typing = false;
+                        updateHighScoreTable(textEdit.getString(), score);
+                        updateToFile();
+                        assetLoader.loadAsset("Clear");
+                        assetLoader.loadAsset("HighScore");
+                        window.setText("ScoreTxt1", highScoreNames[0] + "\t\t" + highScores[0]);
+                        window.setText("ScoreTxt2", highScoreNames[1] + "\t\t" + highScores[1]);
+                        window.setText("ScoreTxt3", highScoreNames[2] + "\t\t" + highScores[2]);
+                        window.setText("ScoreTxt4", highScoreNames[3] + "\t\t" + highScores[3]);
+                    }
+                }
+            }
         }
 
-        //returns if the ship is active
-        public bool getShipIsVisible()
+        //binds the keyboard keys in the options
+        public void keyboardBind()
         {
-            return ship.isVisible;
+            if (keyPress == true)
+            {
+                window.moveEntity("PressKeyTxt", new Vector2f(195, 420));
+                if (keyboardSingle != "" && keyboardSingle != "unknownkey")
+                {
+                    switch (setKey)
+                    {
+                        case "Fire":
+                            fireKey = keyboardSingle;
+                            keyPress = false;
+                            if (fireKey.Contains("Letr") == true)
+                            {
+                                window.setText("FireKeyTxt", fireKey[4].ToString());
+                            }
+                            else
+                            {
+                                window.setText("FireKeyTxt", fireKey);
+                            }
+                            break;
+                        case "Pause":
+                            pauseKey = keyboardSingle;
+                            keyPress = false;
+                            window.setText("PauseKeyTxt", pauseKey);
+                            if (pauseKey.Contains("Letr") == true)
+                            {
+                                window.setText("PauseKeyTxt", pauseKey[4].ToString());
+                            }
+                            else
+                            {
+                                window.setText("PauseKeyTxt", pauseKey);
+                            }
+                            break;
+                        case "HyperSpace":
+                            hyperspaceKey = keyboardSingle;
+                            keyPress = false;
+                            window.setText("HyperspaceKeyTxt", hyperspaceKey);
+                            if (hyperspaceKey.Contains("Letr") == true)
+                            {
+                                window.setText("HyperspaceKeyTxt", hyperspaceKey[4].ToString());
+                            }
+                            else
+                            {
+                                window.setText("HyperspaceKeyTxt", hyperspaceKey);
+                            }
+                            break;
+                        case "Right":
+                            rightKey = keyboardSingle;
+                            keyPress = false;
+                            window.setText("RightKeyTxt", rightKey);
+                            if (rightKey.Contains("Letr") == true)
+                            {
+                                window.setText("RightKeyTxt", rightKey[4].ToString());
+                            }
+                            else
+                            {
+                                window.setText("RightKeyTxt", rightKey);
+                            }
+                            break;
+                        case "Left":
+                            leftKey = keyboardSingle;
+                            keyPress = false;
+                            window.setText("LeftKeyTxt", leftKey);
+                            if (leftKey.Contains("Letr") == true)
+                            {
+                                window.setText("LeftKeyTxt", leftKey[4].ToString());
+                            }
+                            else
+                            {
+                                window.setText("LeftKeyTxt", leftKey);
+                            }
+                            break;
+                        case "Accelerate":
+                            accelerateKey = keyboardSingle;
+                            keyPress = false;
+                            window.setText("AccelerateKeyTxt", accelerateKey);
+                            if (accelerateKey.Contains("Letr") == true)
+                            {
+                                window.setText("AccelerateKeyTxt", accelerateKey[4].ToString());
+                            }
+                            else
+                            {
+                                window.setText("AccelerateKeyTxt", accelerateKey);
+                            }
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                window.moveEntity("PressKeyTxt", new Vector2f(-500, -500));
+            }
         }
 
-        //returns the position of an explosion
-        public Vector2f getExplosionPosition(int index)
+        //takes input for highscores
+        public void inputString()
         {
-            return explosions[index];
+            if (typing == true)
+            {
+                textEdit.takeInput(window.inputKeyboard());
+                window.setText("NameTxt", textEdit.getString());
+            }
         }
 
-        //returns the position of a given large asteroid
-        public Vector2f getLargeAsteroidsPosition(int index)
+        //exits to the main menu if Esc is pressed during the game
+        //exits the program if its pressed in the menus
+        public bool escape()
         {
-            return largeAsteroids[index].position;
+            if (keyboardDown.Contains("Escape"))
+            {
+                if (isMenu == false)
+                {
+                    assetLoader.loadAsset("Clear");
+                    assetLoader.loadAsset("MainMenu");
+                    isMenu = true;
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
-        //returns the position of a given medium asteroid
-        public Vector2f getMediumAsteroidsPosition(int index)
+        //pauses and unpauses the game
+        public void pause()
         {
-            return mediumAsteroids[index].position;
+            if (isMenu == false)
+            {
+                if (keyboardDown.Contains(pauseKey))
+                {
+                    if (isPaused == true)
+                    {
+                        window.moveEntity("PausedTxt", new Vector2f(-500, -500));
+                        isPaused = false;
+                        for (int i = 1; i < explosions.Length + 1; i++)
+                        {
+                            window.resumeAnimation("ExplosionAni" + i.ToString());
+                        }
+                    }
+                    else
+                    {
+                        isPaused = true;
+                        tempVector.X = 270;
+                        tempVector.Y = 210;
+                        window.moveEntity("PausedTxt", tempVector);
+                        for (int i = 1; i < explosions.Length + 1; i++)
+                        {
+                            window.pauseAnimation("ExplosionAni" + i.ToString());
+                        }
+                    }
+                }
+            }
         }
 
-        //returns the position of a given small asteroid
-        public Vector2f getSmallAsteroidsPosition(int index)
+        //destroys explosion if its animation is at the last frame
+        public void explosionLastFrame()
         {
-            return smallAsteroids[index].position;
+            for (int i = 1; i < 5; i++)
+            {
+                if (window.getFrame("ExplosionAni" + i) == 3)
+                {
+                    destroyExplosion(i - 1);
+                }
+            }
         }
 
-        //returns the position of the UFO
-        public Vector2f getUfoPosition()
+        //checks if the game is being played
+        public bool isPlaying()
         {
-            return ufo.position;
+            if (isPaused == false && isMenu == false)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
-        //returns the angle of a bullet
-        public float getBulletAngle(int index)
+        //checks for collisions with bullets
+        public void checkBulletCollisions()
         {
-            return bullets[index].angle;
+            for (int i = 1; i < 5; i++)
+            {
+                if (bullets[i - 1].isVisible)
+                {
+                    tempStr = window.batchIsOverlapping(("BulletSpr" + i), "LargeAsteroidSpr");
+                    for (int ii = 1; ii < 13; ii++)
+                    {
+                        if (tempStr.Contains("LargeAsteroidSpr" + ii))
+                        {
+                            tempVector.X = largeAsteroids[ii - 1].position.X + 43;
+                            tempVector.Y = largeAsteroids[ii - 1].position.Y + 57;
+                            createExplosion(tempVector);
+                            window.goToFrame("ExplosionAni" + explosionCounter, 0);
+                            destroyBullet(i - 1);
+                            destroyLargeAsteroid(ii - 1);
+                            audio.samplePlay("boomSnd");
+                        }
+                    }
+                    tempStr = window.batchIsOverlapping(("BulletSpr" + i), "MediumAsteroidSpr");
+                    for (int ii = 1; ii < 25; ii++)
+                    {
+                        if (tempStr.Contains("MediumAsteroidSpr" + ii))
+                        {
+                            tempVector.X = mediumAsteroids[ii - 1].position.X + 15;
+                            tempVector.Y = mediumAsteroids[ii - 1].position.Y + 23;
+                            createExplosion(tempVector);
+                            window.goToFrame("ExplosionAni" + explosionCounter, 0);
+                            destroyBullet(i - 1);
+                            destroyMediumAsteroid(ii - 1);
+                            audio.samplePlay("boomSnd");
+                        }
+                    }
+                    tempStr = window.batchIsOverlapping(("BulletSpr" + i), "SmallAsteroidSpr");
+                    for (int ii = 1; ii < 25; ii++)
+                    {
+                        if (tempStr.Contains("SmallAsteroidSpr" + ii))
+                        {
+                            createExplosion(smallAsteroids[ii - 1].position);
+                            window.goToFrame("ExplosionAni" + explosionCounter, 0);
+                            destroyBullet(i - 1);
+                            destroySmallAsteroid(ii - 1);
+                            audio.samplePlay("boomSnd");
+                        }
+                    }
+                    if (window.isOverlapping("BulletSpr" + i, "UFOSpr"))
+                    {
+                        createExplosion(ufo.position);
+                        window.goToFrame("ExplosionAni" + explosionCounter, 0);
+                        destroyBullet(i - 1);
+                        destroyUFO();
+                    }
+                }
+            }
         }
 
-        //gets the position of a bullet entity
-        public Vector2f getBulletPosition(int index)
+        //checks for collisions with the ship
+        public void checkShipCollisions()
         {
-            return bullets[index].position;
+            tempStr = window.batchIsOverlapping(("ShipSpr"), "LargeAsteroidSpr");
+            if (tempStr.Contains("LargeAsteroidSpr") && ship.isVisible == true)
+            {
+                tempVector.X = ship.position.X;
+                tempVector.Y = ship.position.Y - 8;
+                createExplosion(tempVector);
+                window.goToFrame("ExplosionAni" + explosionCounter, 0);
+                destroyShip();
+                destroyBullet(0);
+                destroyBullet(1);
+                destroyBullet(2);
+                destroyBullet(3);
+                audio.samplePlay("boomSnd");
+            }
+            tempStr = window.batchIsOverlapping(("ShipSpr"), "MediumAsteroidSpr");
+            if (tempStr.Contains("MediumAsteroidSpr") && ship.isVisible == true)
+            {
+                tempVector.X = ship.position.X;
+                tempVector.Y = ship.position.Y - 8;
+                createExplosion(tempVector);
+                window.goToFrame("ExplosionAni" + explosionCounter, 0);
+                destroyShip();
+                destroyBullet(0);
+                destroyBullet(1);
+                destroyBullet(2);
+                destroyBullet(3);
+                audio.samplePlay("boomSnd");
+            }
+            tempStr = window.batchIsOverlapping(("ShipSpr"), "SmallAsteroidSpr");
+            if (tempStr.Contains("SmallAsteroidSpr") && ship.isVisible == true)
+            {
+                tempVector.X = ship.position.X;
+                tempVector.Y = ship.position.Y - 8;
+                createExplosion(tempVector);
+                window.goToFrame("ExplosionAni" + explosionCounter, 0);
+                destroyShip();
+                destroyBullet(0);
+                destroyBullet(1);
+                destroyBullet(2);
+                destroyBullet(3);
+                audio.samplePlay("boomSnd");
+            }
+            if (window.isOverlapping("ShipSpr", "UFOSpr") && ship.isVisible == true)
+            {
+                tempVector.X = ship.position.X;
+                tempVector.Y = ship.position.Y - 8;
+                createExplosion(tempVector);
+                window.goToFrame("ExplosionAni" + explosionCounter, 0);
+                destroyShip();
+                destroyBullet(0);
+                destroyBullet(1);
+                destroyBullet(2);
+                destroyBullet(3);
+                audio.samplePlay("boomSnd");
+            }
+        }
+        
+        //ends the game if you are out of lives
+        public void checkEndOfGame()
+        {
+            if (ship.isVisible == false && lives > 0)
+            {
+                shipRespawn();
+            }
+            else if (ship.isVisible == false && lives == 0)
+            {
+                ticker.increment();
+            }
+            if (ticker.atAmount(70) && ship.isVisible == false)
+            {
+                ticker.resetCounter();
+                isMenu = true;
+                assetLoader.loadAsset("Clear");
+                if (score > highScores[0] ||
+                    score > highScores[1] ||
+                    score > highScores[2] ||
+                    score > highScores[3])
+                {
+                    assetLoader.loadAsset("EnterHighScore");
+                    tempStr = string.Empty;
+                    typing = true;
+                }
+                else
+                {
+                    assetLoader.loadAsset("MainMenu");
+                }
+            }
         }
 
-        //returns if a bullet is active
-        public bool getBulletIsVisible(int index)
+        //updates all entitys
+        public void entityUpdate()
         {
-            return bullets[index].isVisible;
+            makeUFO();
+            fireBullet(keyboardDown);
+            moveShip(keyboard);
+            hyperspaceJump(keyboardDown);
+            wrapEntitys();
+            updatePositions();
+            window.setText("ScoreBoardTxt", "Score: " + score.ToString());
+            window.setText("LevelTxt", "Level: " + (level + 1));
+            window.setText("LivesTxt", "Lives: " + lives);
         }
 
-        //returns if the game is paused
-        public bool getIsPaused()
+        //changes the level
+        public void changeLevel()
         {
-            return isPaused;
+            if (levelEnded())
+            {
+                ticker.increment();
+            }
+            if (levelEnded() && ticker.atAmount(30))
+            {
+                ticker.resetCounter();
+                nextLevel();
+            }
         }
 
-        //returns the current level the player is on
-        public int getLevel()
+        //graphic update
+        public void graphicUpdate()
         {
-            return level + 1;
-        }
-
-        //returns the name of the pause key
-        public string getPauseKey()
-        {
-            return pauseKey;
-        }
-
-        //returns the name of the fire key
-        public string getFireKey()
-        {
-            return fireKey;
-        }
-
-        //returns the name of the left key
-        public string getLeftKey()
-        {
-            return leftKey;
-        }
-
-        //returns the name of the right key
-        public string getRightKey()
-        {
-            return rightKey;
-        }
-
-        //returns the name of the accelerate key
-        public string getAccelerateKey()
-        {
-            return accelerateKey;
-        }
-
-        //returns the name of the hyperspace key
-        public string getHyperspaceKey()
-        {
-            return hyperspaceKey;
-        }
-
-        //returns if the sound is on or off
-        public bool getSoundOn()
-        {
-            return soundOn;
-        }
-
-        //returns the given highscore name
-        public string getHighScoreName(int index)
-        {
-            return highScoreNames[index];
-        }
-
-        //returns the given highscore
-        public int getHighScore(int index)
-        {
-            return highScores[index];
-        }
-
-        //returns the score
-        public int getScore()
-        {
-            return score;
-        }
-
-        //returns how many lives you have
-        public int getLives()
-        {
-            return lives;
-        }
-
-        //returns what explosion you're on
-        public int getExplosionNumber()
-        {
-            return explosionCounter;
-        }
-
-        //returns the speed of the game
-        public float getGameSpeed()
-        {
-            return gameSpeed;
-        }
-
-        //sets if the ship is active
-        public void setIsVisible(bool visible)
-        {
-            ship.isVisible = visible;
-        }
-
-        //moves an explosion
-        public void moveExplostion(int index, Vector2f position)
-        {
-            explosions[index] = position;
-        }
-
-        //set if the game is paused
-        public void setIsPaused(bool pause)
-        {
-            isPaused = pause;
-        }
-
-        //sets the given highscore name
-        public void setHighScoreName(int index, string name)
-        {
-            highScoreNames[index] = name;
-        }
-
-        //sets the given highscore
-        public void setHighScore(int index, int score)
-        {
-            highScores[index] = score;
-        }
-
-        //sets if the sound is on or off
-        public void setSoundOn(bool sound)
-        {
-            soundOn = sound;
-        }
-
-        //sets the speed of the game
-        public void setGameSpeed(int speed)
-        {
-            gameSpeed = speed;
-        }
-
-        //sets the fire key
-        public void setFireKey(string key)
-        {
-            fireKey = key;
-        }
-
-        //sets the pause key
-        public void setPauseKey(string key)
-        {
-            pauseKey = key;
-        }
-
-        //sets the left key
-        public void setLeftKey(string key)
-        {
-            leftKey = key;
-        }
-
-        //sets the right key
-        public void setRightKey(string key)
-        {
-            rightKey = key;
-        }
-
-        //sets the accelerate key
-        public void setAccelerateKey(string key)
-        {
-            accelerateKey = key;
-        }
-
-        //sets the hyperspace key
-        public void setHyperspaceKey(string key)
-        {
-            hyperspaceKey = key;
-        }
-    }
-
-    //keeps all information needed for an entity on the screen
-    class Entity
-    {
-        public Vector2f position;
-        public Vector2f vector;
-        public int angle;
-        public float speed;
-        public bool isVisible;
-
-        public Entity()
-        {
-            position = new Vector2f(0, 0);
-            vector = new Vector2f();
-            angle = 0;
-            speed = 0;
-            isVisible = false;
-        }
-
-        public Entity(Vector2f startingPos)
-        {
-            position = startingPos;
-            vector = new Vector2f(0,0);
-            angle = 0;
-            speed = 0;
-            isVisible = false;
+            window.rotateEntityCenter("ShipSpr", ship.angle);
+            window.moveEntity("ShipSpr", ship.position);
+            for (int i = 1; i < 49; i++)
+            {
+                if (i < 5)
+                {
+                    window.moveEntity(("BulletSpr" + i), bullets[i - 1].position);
+                    window.moveEntity(("ExplosionAni" + i), explosions[i - 1]);
+                    window.rotateEntityCenter("BulletSpr" + i, bullets[i - 1].angle);
+                }
+                if (i < 13)
+                {
+                    window.moveEntity(("LargeAsteroidSpr" + i), largeAsteroids[i - 1].position);
+                }
+                if (i < 25)
+                {
+                    window.moveEntity(("MediumAsteroidSpr" + i), mediumAsteroids[i - 1].position);
+                }
+                window.moveEntity(("SmallAsteroidSpr" + i), smallAsteroids[i - 1].position);
+            }
+            window.moveEntity("UFOSpr", ufo.position);
         }
     }
 }

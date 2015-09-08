@@ -2,7 +2,7 @@ Asteroids
 =========
 
 An Asteroids clone.
-Made in C# with ver 1.2 of my SFML C# game engine.
+Made in C# with ver 1.31 of my SFML C# game engine.
 Features:
 High score table, 
 Customizable controls, 
