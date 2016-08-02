@@ -1,0 +1,35 @@
+c:\users\doug\documents\visual studio 2012\Projects\Asteroids\Asteroids\bin\Debug\Asteroids.exe.config
+c:\users\doug\documents\visual studio 2012\Projects\Asteroids\Asteroids\obj\Debug\Asteroids.csprojResolveAssemblyReference.cache
+c:\users\doug\documents\visual studio 2012\Projects\Asteroids\Asteroids\bin\Debug\csfml-audio-2.dll
+c:\users\doug\documents\visual studio 2012\Projects\Asteroids\Asteroids\bin\Debug\csfml-graphics-2.dll
+c:\users\doug\documents\visual studio 2012\Projects\Asteroids\Asteroids\bin\Debug\csfml-window-2.dll
+c:\users\doug\documents\visual studio 2012\Projects\Asteroids\Asteroids\bin\Debug\libsndfile-1.dll
+c:\users\doug\documents\visual studio 2012\Projects\Asteroids\Asteroids\bin\Debug\openal32.dll
+c:\users\doug\documents\visual studio 2012\Projects\Asteroids\Asteroids\bin\Debug\engine.ini
+c:\users\doug\documents\visual studio 2012\Projects\Asteroids\Asteroids\bin\Debug\Asteroids.exe
+c:\users\doug\documents\visual studio 2012\Projects\Asteroids\Asteroids\bin\Debug\Asteroids.pdb
+c:\users\doug\documents\visual studio 2012\Projects\Asteroids\Asteroids\bin\Debug\sfmlnet-audio-2.dll
+c:\users\doug\documents\visual studio 2012\Projects\Asteroids\Asteroids\bin\Debug\sfmlnet-graphics-2.dll
+c:\users\doug\documents\visual studio 2012\Projects\Asteroids\Asteroids\bin\Debug\sfmlnet-window-2.dll
+c:\users\doug\documents\visual studio 2012\Projects\Asteroids\Asteroids\obj\Debug\Asteroids.exe
+c:\users\doug\documents\visual studio 2012\Projects\Asteroids\Asteroids\obj\Debug\Asteroids.pdb
+C:\Users\Doug\documents\visual studio 2012\Projects\Asteroids\Asteroids\bin\Debug\fonts\arial.ttf
+C:\Users\Doug\documents\visual studio 2012\Projects\Asteroids\Asteroids\bin\Debug\sprites\spritemap.png
+C:\Users\Doug\documents\visual studio 2012\Projects\Asteroids\Asteroids\bin\Debug\sound\BOOM2.WAV
+C:\Users\Doug\documents\visual studio 2012\Projects\Asteroids\Asteroids\bin\Debug\sound\POP1.WAV
+C:\Users\Doug\Documents\GitHub\AsteroidsSharp\Asteroids\bin\Debug\Asteroids.exe.config
+C:\Users\Doug\Documents\GitHub\AsteroidsSharp\Asteroids\obj\Debug\Asteroids.exe
+C:\Users\Doug\Documents\GitHub\AsteroidsSharp\Asteroids\obj\Debug\Asteroids.pdb
+C:\Users\Doug\Documents\GitHub\AsteroidsSharp\Asteroids\bin\Debug\sound\BOOM2.WAV
+C:\Users\Doug\Documents\GitHub\AsteroidsSharp\Asteroids\bin\Debug\csfml-audio-2.dll
+C:\Users\Doug\Documents\GitHub\AsteroidsSharp\Asteroids\bin\Debug\csfml-graphics-2.dll
+C:\Users\Doug\Documents\GitHub\AsteroidsSharp\Asteroids\bin\Debug\csfml-window-2.dll
+C:\Users\Doug\Documents\GitHub\AsteroidsSharp\Asteroids\bin\Debug\libsndfile-1.dll
+C:\Users\Doug\Documents\GitHub\AsteroidsSharp\Asteroids\bin\Debug\openal32.dll
+C:\Users\Doug\Documents\GitHub\AsteroidsSharp\Asteroids\bin\Debug\sound\POP1.WAV
+C:\Users\Doug\Documents\GitHub\AsteroidsSharp\Asteroids\bin\Debug\sprites\spritemap.png
+C:\Users\Doug\Documents\GitHub\AsteroidsSharp\Asteroids\bin\Debug\fonts\arial.ttf
+C:\Users\Doug\Documents\GitHub\AsteroidsSharp\Asteroids\bin\Debug\engine.ini
+C:\Users\Doug\Documents\GitHub\AsteroidsSharp\Asteroids\bin\Debug\Asteroids.exe
+C:\Users\Doug\Documents\GitHub\AsteroidsSharp\Asteroids\bin\Debug\Asteroids.pdb
+C:\Users\Doug\Documents\GitHub\AsteroidsSharp\Asteroids\obj\Debug\Asteroids.csprojResolveAssemblyReference.cache
